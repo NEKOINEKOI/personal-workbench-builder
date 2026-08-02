@@ -1,0 +1,17 @@
+{
+  "version": "V3",
+  "files": [
+    "README.md",
+    "SKILL.md",
+    "references/acceptance-checklist.md",
+    "references/core-workflow-template.md",
+    "references/development-rules.md",
+    "references/environment-check.md",
+    "references/feature-card-template.md",
+    "references/handoff-artifacts.md",
+    "references/requirement-interview.md",
+    "references/success-metrics.md",
+    "references/workbench-blueprint-template.md",
+    "tests/scenario-tests.md"
+  ]
+}
