@@ -1,36 +1,98 @@
-# Personal Workbench Builder Skill V3
+# Personal Workbench Builder Skill
 
-一个用于在编码前完成需求判断、最少必要访谈、范围控制、工作台蓝图、开发交接和验收的 Codex Skill。
+在写代码之前，把需求想清楚的 skill。
+
+大多数 AI 编程的翻车，不是代码写得烂，是**需求没搞清楚就让 AI 动手了**——做出来发现不是自己想要的，返工三轮还不如从零开始。
+
+这个 skill 的职责是：在编码前完成需求判断、最少必要访谈、范围控制、工作台蓝图、开发交接和验收，把模糊的「我想要个工具」变成 AI 能直接执行的完整方案。
+
+## 它解决什么问题
+
+跟 AI 说「帮我做个 XX 工具」时，常见的翻车场景：
+
+- AI 不知道你要什么类型（看板？记录工具？执行型工作台？），做出来方向就错了
+- 没有数据来源的功能被硬编出来，全是假数据
+- 第一版塞了 20 个功能，没有一个跑得通
+- 按钮点了没反应，不知道系统在干嘛
+- 没有关键任务闭环，做完发现功能是散的
+
+这个 skill 把这些问题挡在编码之前。
+
+## 四种工作台类型
+
+skill 会先判断你要做的是哪一类：
+
+| 类型 | 特征 | 典型功能 |
+|------|------|----------|
+| **信息看板** dashboard | 打开看清楚状况，很少在里面操作 | 今日概览、项目状态、日程摘要、数据统计 |
+| **记录工具** tracker | 长期维护数据，增删改查 | 待办、习惯、账目、笔记、订阅、客户记录 |
+| **执行工作台** action_workspace | 直接在里面完成任务，调 AI/接口/自动化 | 生成周报、分析文件、批处理、调模型、发送结果 |
+| **混合型** hybrid | 以上三种都有 | |
+
+类型判断错了，后面全白费。
+
+## 16 个阶段
+
+| 阶段 | 干什么 |
+|------|--------|
+| 0 需求完整度判断 | 评估六项打分（0-12 分），决定走快速模式还是深度模式 |
+| 1 产品类型判断 | 看板 / 记录 / 执行 / 混合 |
+| 2 模式选择 | 快速模式（≤5 功能、6 轮访谈）或深度模式 |
+| 3 最少必要访谈 | 只问影响方案的问题，连续两轮没新信息就停 |
+| 4 候选功能生成 | 把自然语言转成功能卡（含数据来源、触发方式、失败处理） |
+| 5 功能筛选 | 价值评分排序，第一版只留 3-5 个模块 |
+| 6 关键任务闭环 | 至少定义一条完整的任务路径，功能拼盘不算合格 |
+| 7 默认方案 | 单人本机 / 多设备同步 / 需要 AI 各自的技术默认值 |
+| 8 工作台蓝图 | 输出完整方案让用户确认 |
+| 9 低保真原型 | 确认页面结构和导航，不接真实 API |
+| 10 环境检查 | 检查当前环境能做什么、不能做什么 |
+| 11 开发交接文件 | 生成 REQUIREMENTS / BLUEPRINT / FEATURES / USER_FLOWS 等，交给编程 AI |
+| 12 开发 | 只实现当前版本，不顺手扩需求 |
+| 13 验收 | 功能 / 数据 / 异常 / 第三方 / AI / 移动端 / 闭环全过一遍 |
+| 14 成功指标 | 定义一周打开几天、关键任务完成几次 |
+| 15 交付 | 说清楚完成了什么、没完成什么 |
+| 16 迭代 | 优先修复、简化、删除，最后才加功能 |
+
+## 核心原则
+
+1. **不重复问用户已经说过的话**
+2. **信息够用就直接出方案，只追关键缺口**
+3. **用户确认蓝图前不写完整代码**
+4. **每个功能必须通过「真实功能四问」**：数据从哪来？用户怎么触发？系统执行什么？失败时怎么办？——有一问答不上来就不能进当前版本
+5. **不拿假数据冒充实时数据**
+6. **不留没动作的按钮**
+7. **成熟工具能解决的不重复开发，优先保留或嵌入**
+8. **迭代时先修复、简化、删除，最后才加功能**
 
 ## 安装
 
-将整个 `personal-workbench-builder` 目录复制到 Codex Skills 目录：
+支持 Claude Code、Codex、WorkBuddy、Cursor 等所有兼容开放 skill 标准的 Agent：
 
-```text
-~/.codex/skills/personal-workbench-builder/
+```bash
+git clone https://github.com/NEKOINEKOI/personal-workbench-builder ~/.workbuddy/skills/personal-workbench-builder
 ```
 
-重新启动 Codex 后，可用 `$personal-workbench-builder` 显式调用。
+Agent 不支持 Skill 也没关系，直接把 `SKILL.md` 贴进对话即可。
 
-## 目录
+## 文件结构
 
-- `SKILL.md`：主流程与总控规则
-- `references/`：访谈、蓝图、功能卡、开发和验收模板
-- `tests/scenario-tests.md`：七组压力测试场景
-- `manifest.json`：V3 文件清单
-
-
----
-
-## 关注公众号
-
-<div align="center">
-
-**扫码关注公众号「智井AI」**
-
-<img src="https://raw.githubusercontent.com/NEKOINEKOI/tomoai-skills/main/docs/zhijing-ai-qrcode.png" alt="智井AI 公众号二维码" width="240" />
-
-</div>
+```
+.
+├── SKILL.md                              # 主流程与总控规则（16 阶段路由）
+├── manifest.json                         # V3 文件清单
+├── references/
+│   ├── requirement-interview.md          # 深度模式访谈模板
+│   ├── feature-card-template.md          # 功能卡模板
+│   ├── core-workflow-template.md         # 关键任务闭环模板
+│   ├── workbench-blueprint-template.md   # 工作台蓝图模板
+│   ├── environment-check.md              # 环境能力检查
+│   ├── handoff-artifacts.md              # 开发交接文件模板
+│   ├── development-rules.md              # 开发规则
+│   ├── acceptance-checklist.md           # 验收清单
+│   └── success-metrics.md                # 成功指标模板
+└── tests/
+    └── scenario-tests.md                 # 七组压力测试场景
+```
 
 ## 许可协议
 
@@ -40,9 +102,17 @@
 - ❌ **禁止**：销售、出租、集成到付费产品、提供有偿服务、任何商业环境使用
 - 📋 **要求**：保留原作者署名
 
-商用授权请联系作者。详见 [LICENSE](LICENSE)。
+详见 [LICENSE](LICENSE)。
 
 ---
+
+<div align="center">
+
+**扫码关注公众号「智井AI」**
+
+<img src="https://raw.githubusercontent.com/NEKOINEKOI/tomoai-skills/main/docs/zhijing-ai-qrcode.png" alt="智井AI 公众号二维码" width="240" />
+
+</div>
 
 <div align="center">
 
